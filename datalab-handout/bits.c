@@ -152,7 +152,6 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
-
   return 1 << 31;
 
 }
@@ -165,7 +164,7 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return !(~x ^ (x + 1));
+  return (!(~x ^ (x + 1))) & !!(~x);
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -261,8 +260,19 @@ int logicalNeg(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  return 0;
-}
+  int ret = 0;
+  int y = ~x;
+  int a = (x >> 31) & 1;
+  int b = a ^ 1;
+  x = (x & (~b + 1)) | (y & (~a + 1));
+  x <<= 1;
+  ret |= !!(x >> (ret + 16)) << 4;
+  ret |= !!(x >> (ret + 8)) << 3;
+  ret |= !!(x >> (ret + 4)) << 2;
+  ret |= !!(x >> (ret + 2)) << 1;
+  ret |= !!(x >> (ret + 1));
+  return ret + 1;
+} 
 //float
 /* 
  * floatScale2 - Return bit-level equivalent of expression 2*f for
@@ -276,8 +286,15 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  
-  return 2;
+  unsigned M = uf & 0x7fffff;
+  unsigned E = (uf & 0x7f800000) >> 23;
+  if(E){
+    if(E == 255) return uf;
+    E++;
+  } else {
+    M <<= 1;
+  }
+  return (uf & 0x80000000) | (E << 23) | M;
 }
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
@@ -292,7 +309,15 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+  unsigned M = uf & 0x7fffff;
+  unsigned E = (uf & 0x7f800000) >> 23;
+  if(E < 127) return 0;
+  if(E > 157) return 0x80000000;
+  M |= 0x800000;
+  if(E < 151) M >>= 150 - E;
+  else M <<= E - 150;
+  if(uf & 0x80000000) return ~M + 1;
+  else return M;
 }
 /* 
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
@@ -308,5 +333,8 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-    return 2;
+  if(x > 127) return 0x7f800000;
+  if(x > -127) return (x + 127) << 23;
+  if(x >= -150) return 1 << (150 + x);
+  return 0; 
 }
